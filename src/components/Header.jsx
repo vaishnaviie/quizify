@@ -6,7 +6,7 @@ function Header() {
           Q
         </div>
 
-        <span className="text-base font-bold tracking-tight">QUIZLY</span>
+        <span className="text-base font-bold tracking-tight">QUIZIFY</span>
       </div>
 
       <span className="text-[10px] font-semibold tracking-[0.12em] text-[#A9B8AF] sm:text-xs">

@@ -81,7 +81,7 @@ function QuizSetup({
                 setQuestionCount(value);
               }
             }}
-            className="mt-2 w-24 rounded-xl border border-[#D7DED7] bg-[#F3F5EF] px-4 py-3 text-sm font-semibold text-[#17382B] outline-none transition focus:border-[#8DBB4C] focus:ring-4 focus:ring-[#DDF0B5]"
+            className="mt-2 ml-4 w-24 rounded-xl border border-[#D7DED7] bg-[#F3F5EF] px-4 py-3 text-sm font-semibold text-[#17382B] outline-none transition focus:border-[#8DBB4C] focus:ring-4 focus:ring-[#DDF0B5]"
           />
         </div>
 
