@@ -4,7 +4,8 @@ function Score() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { score, totalQuestions, questions } = location.state || {};
+  const { score, totalQuestions, notes, questionCount, questions } =
+    location.state || {};
 
   if (score === undefined || totalQuestions === undefined) {
     return (
@@ -16,7 +17,7 @@ function Score() {
 
           <button
             onClick={() => navigate("/")}
-            className="mt-5 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            className="mt-5 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700"
           >
             Back to Home
           </button>
@@ -81,6 +82,8 @@ function Score() {
               onClick={() =>
                 navigate("/quiz", {
                   state: {
+                    notes,
+                    questionCount,
                     questions,
                   },
                 })

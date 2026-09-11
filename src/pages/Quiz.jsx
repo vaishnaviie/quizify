@@ -1,44 +1,118 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import useQuiz from "../hooks/useQuiz";
 
 function Quiz() {
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const quizQuestions = [
-    {
-      question: "Which of the following is a JavaScript framework?",
-      options: ["React", "HTML", "CSS", "Git"],
-      correctAnswer: "React",
-    },
-    {
-      question: "Which hook is used to manage state in React?",
-      options: ["useEffect", "useState", "useRef", "useMemo"],
-      correctAnswer: "useState",
-    },
-    {
-      question: "Which language is used to style web pages?",
-      options: ["JavaScript", "Python", "CSS", "Java"],
-      correctAnswer: "CSS",
-    },
-    {
-      question: "What does API stand for?",
-      options: [
-        "Application Programming Interface",
-        "Advanced Programming Integration",
-        "Application Process Interface",
-        "Automated Programming Interface",
-      ],
-      correctAnswer: "Application Programming Interface",
-    },
-    {
-      question: "Which tool is commonly used for version control?",
-      options: ["Figma", "Git", "Vite", "React"],
-      correctAnswer: "Git",
-    },
-  ];
+  const {
+    notes,
+    questionCount,
+    questions: existingQuestions,
+  } = location.state || {};
+
+  const { loading, error, createQuiz } = useQuiz();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [quizQuestions, setQuizQuestions] = useState(existingQuestions || []);
+
+  const hasGenerated = useRef(false);
+
+  useEffect(() => {
+    // If questions already exist, use them.
+    // This happens when the user clicks "Retake Quiz".
+    if (existingQuestions?.length) {
+      return;
+    }
+
+    // Generate quiz only when there are no existing questions.
+    if (!notes || !questionCount || hasGenerated.current) {
+      return;
+    }
+
+    hasGenerated.current = true;
+
+    createQuiz(notes, questionCount).then((questions) => {
+      if (questions) {
+        setQuizQuestions(questions);
+      }
+    });
+  }, [notes, questionCount, existingQuestions]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600" />
+
+          <h1 className="mt-5 text-xl font-bold text-slate-900">
+            Generating your quiz...
+          </h1>
+
+          <p className="mt-2 text-sm text-slate-500">
+            AI is creating questions from your notes.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-xl">
+            !
+          </div>
+
+          <h1 className="mt-5 text-xl font-bold text-slate-900">
+            Something went wrong
+          </h1>
+
+          <p className="mt-2 text-sm leading-6 text-slate-500">{error}</p>
+
+          <button
+            onClick={() => {
+              if (notes && questionCount) {
+                createQuiz(notes, questionCount).then((questions) => {
+                  if (questions) {
+                    setQuizQuestions(questions);
+                  }
+                });
+              }
+            }}
+            className="mt-6 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  // Empty state
+  if (!quizQuestions || quizQuestions.length === 0) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div className="text-center">
+          <h1 className="text-xl font-bold text-slate-900">
+            No quiz questions found
+          </h1>
+
+          <button
+            onClick={() => navigate("/")}
+            className="mt-5 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700"
+          >
+            Back to Home
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   const question = quizQuestions[currentQuestion];
 
@@ -74,6 +148,8 @@ function Quiz() {
       state: {
         score,
         totalQuestions: quizQuestions.length,
+        notes,
+        questionCount,
         questions: quizQuestions,
       },
     });
