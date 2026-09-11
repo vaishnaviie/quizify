@@ -1,6 +1,29 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+  const [notes, setNotes] = useState("");
+  const [questionCount, setQuestionCount] = useState(5);
+  const navigate = useNavigate();
+
   const topics = ["React", "JavaScript", "Core Web Vitals", "Computer Science"];
 
+  const handleTopicClick = (topic) => {
+    setNotes(topic);
+  };
+
+  const handleGenerateQuiz = () => {
+    if (!notes.trim()) {
+      return;
+    }
+
+    navigate("/quiz", {
+      state: {
+        notes: notes.trim(),
+        questionCount,
+      },
+    });
+  };
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900">
       <div className="mx-auto flex min-h-[90vh] max-w-4xl flex-col">
@@ -40,6 +63,8 @@ function Home() {
             </label>
 
             <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
               placeholder="Paste your notes or enter a topic..."
               className="h-40 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50"
             />
@@ -53,7 +78,12 @@ function Home() {
                 {[5, 8, 10].map((count) => (
                   <button
                     key={count}
-                    className="rounded-lg border border-slate-200 px-5 py-2 text-sm font-medium text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600"
+                    onClick={() => setQuestionCount(count)}
+                    className={`rounded-lg border px-5 py-2 text-sm font-medium transition ${
+                      questionCount === count
+                        ? "border-indigo-600 bg-indigo-50 text-indigo-600"
+                        : "border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600"
+                    }`}
                   >
                     {count}
                   </button>
@@ -70,6 +100,7 @@ function Home() {
                 {topics.map((topic) => (
                   <button
                     key={topic}
+                    onClick={() => handleTopicClick(topic)}
                     className="rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-600 transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600"
                   >
                     {topic}
@@ -78,7 +109,10 @@ function Home() {
               </div>
             </div>
 
-            <button className="mt-7 w-full rounded-xl bg-indigo-600 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.99]">
+            <button
+              onClick={handleGenerateQuiz}
+              className="mt-7 w-full rounded-xl bg-indigo-600 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.99]"
+            >
               ✨ Generate Quiz
             </button>
           </div>

@@ -1,7 +1,31 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 function Score() {
-  const score = 4;
-  const totalQuestions = 5;
-  const percentage = 80;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { score, totalQuestions, questions } = location.state || {};
+
+  if (score === undefined || totalQuestions === undefined) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-slate-900">
+            No quiz result found
+          </h1>
+
+          <button
+            onClick={() => navigate("/")}
+            className="mt-5 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+          >
+            Back to Home
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  const percentage = Math.round((score / totalQuestions) * 100);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8 text-slate-900">
@@ -46,11 +70,23 @@ function Score() {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button className="rounded-xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+            <button
+              onClick={() => navigate("/")}
+              className="rounded-xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+            >
               Back to Home
             </button>
 
-            <button className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">
+            <button
+              onClick={() =>
+                navigate("/quiz", {
+                  state: {
+                    questions,
+                  },
+                })
+              }
+              className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
+            >
               Retake Quiz
             </button>
           </div>
