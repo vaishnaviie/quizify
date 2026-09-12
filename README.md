@@ -32,7 +32,6 @@ https://quizify-ai-app.vercel.app/
 - Retry on failed quiz generation
 - Responsive UI
 - AI response parsing and validation
-- Server-side API integration to keep the API key secure
 
 ## Tech Stack
 
@@ -51,8 +50,6 @@ LLM responses can be unpredictable, so the application processes and validates t
 
 ### AI Response Processing
 
-The Vercel Serverless Function acts as a server-side layer between the frontend and OpenRouter.
-
 It handles:
 
 - Failed API requests
@@ -60,7 +57,6 @@ It handles:
 - Invalid JSON
 - Markdown-wrapped JSON responses
 - Unexpected response shapes
-- Supported response format normalization
 
 ### Frontend Validation
 
@@ -73,7 +69,6 @@ Before rendering the quiz, the frontend validates:
 - Valid correct answer
 - Correct answer matching one of the provided options
 
-Invalid or unusable AI output is rejected instead of being rendered as broken UI.
 
 ## Project Structure
 
@@ -164,20 +159,16 @@ Open the local URL provided by Vite in your browser.
 
 ## AI Usage
 
-I used **ChatGPT** and **Cursor** during development for:
-
 - Understanding LLM and API integration concepts
 - Exploring implementation approaches
 - Debugging and troubleshooting
 - Reviewing edge cases
 - Improving UI implementation
 
-AI-generated suggestions were reviewed and adapted during development. The final implementation, architecture, and design decisions were made by me.
-
 ## Known Limitations
 
 - Quiz quality depends on the provided input and AI model response.
-- Only multiple-choice quizzes are currently supported.
+- Only single-choice quizzes are currently supported.
 - Quiz sessions are not persisted after leaving the application.
 - AI responses are not streamed.
 - Authentication is not implemented.
