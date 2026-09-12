@@ -1,4 +1,4 @@
-function LoadingState({ message }) {
+function LoadingState({ message, subMessage }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#102F24] px-4">
       <div className="text-center">
@@ -7,6 +7,7 @@ function LoadingState({ message }) {
         <h1 className="mt-5 text-xl font-bold text-[#F4F0E6]">{message}</h1>
 
         <p className="mt-2 text-sm text-[#A9B8AF]">
+          {subMessage}
           Quizly is creating questions from your notes.
         </p>
       </div>

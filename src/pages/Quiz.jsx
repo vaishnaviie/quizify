@@ -50,12 +50,22 @@ function Quiz() {
 
   // Loading state
   if (loading) {
-    return <LoadingState message="Generating your quiz..." />;
+    return (
+      <LoadingState
+        message="Generating your quiz..."
+        subMessage="Quizly is creating questions from your notes."
+      />
+    );
   }
 
   // submiting quiz
   if (submitting) {
-    return <LoadingState message="Calculating your score..." />;
+    return (
+      <LoadingState
+        message="Calculating your score..."
+        subMessage="Quizly is calculating your score"
+      />
+    );
   }
 
   // Error state
