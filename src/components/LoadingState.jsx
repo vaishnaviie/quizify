@@ -6,10 +6,7 @@ function LoadingState({ message, subMessage }) {
 
         <h1 className="mt-5 text-xl font-bold text-[#F4F0E6]">{message}</h1>
 
-        <p className="mt-2 text-sm text-[#A9B8AF]">
-          {subMessage}
-          Quizly is creating questions from your notes.
-        </p>
+        <p className="mt-2 text-sm text-[#A9B8AF]">{subMessage}</p>
       </div>
     </main>
   );
